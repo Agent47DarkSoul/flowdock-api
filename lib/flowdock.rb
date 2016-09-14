@@ -3,7 +3,7 @@ require 'httparty'
 require 'multi_json'
 
 module Flowdock
-  FLOWDOCK_API_URL = "https://api.flowdock.com/v1"
+  FLOWDOCK_API_URL = "https://api.flowdock.com"
 
   class InvalidParameterError < StandardError; end
   class NotFoundError < StandardError; end
@@ -200,7 +200,11 @@ module Flowdock
     private
 
     def api_url(path)
-      File.join(FLOWDOCK_API_URL, path)
+      if path.match(/^#{FLOWDOCK_API_URL}/)
+        path
+      else
+        File.join(FLOWDOCK_API_URL, path)
+      end
     end
 
     def headers
