@@ -178,22 +178,22 @@ module Flowdock
     end
 
     def post(path, data = {})
-      resp = self.class.post(api_url(path), :body => MultiJson.dump(data), :basic_auth => {:username => @api_token, :password => ''}, :headers => headers)
+      resp = self.class.post(api_url(path), :body => MultiJson.dump(data), :headers => auth_headers)
       handle_response(resp)
     end
 
     def get(path, data = {})
-      resp = self.class.get(api_url(path), :query => data, :basic_auth => {:username => @api_token, :password => ''}, :headers => headers)
+      resp = self.class.get(api_url(path), :query => data, :headers => auth_headers)
       handle_response(resp)
     end
 
     def put(path, data = {})
-      resp = self.class.put(api_url(path), :body => MultiJson.dump(data), :basic_auth => {:username => @api_token, :password => ''}, :headers => headers)
+      resp = self.class.put(api_url(path), :body => MultiJson.dump(data), :headers => auth_headers)
       handle_response(resp)
     end
 
     def delete(path)
-      resp = self.class.delete(api_url(path), :basic_auth => {:username => @api_token, :password => ''}, :headers => headers)
+      resp = self.class.delete(api_url(path), :headers => auth_headers)
       handle_response(resp)
     end
 
@@ -206,7 +206,9 @@ module Flowdock
     def headers
       {"Content-Type" => "application/json", "Accept" => "application/json"}
     end
+
+    def auth_headers
+      headers.merge('Authorization' => "Bearer #{@api_token}")
+    end
   end
-
-
 end
